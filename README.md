@@ -4,8 +4,6 @@
 
 ## Install
 
-[npm][]:
-
 ```sh
 npm install traste
 ```
