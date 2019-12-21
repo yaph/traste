@@ -1,0 +1,1 @@
+export { drawFretboard } from "./js/fretboard.js";

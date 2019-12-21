@@ -1,0 +1,52 @@
+{
+  "name": "traste",
+  "description": "A library for rendering guitar and ukulele fretboards as SVG elements.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Ramiro Gómez",
+    "url": "https://ramiro.org/"
+  },
+  "bugs": {
+    "url": "https://github.com/yaph/traste/issues",
+    "email": "code@ramiro.org"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.7.7",
+    "@babel/preset-env": "^7.7.7",
+    "rollup": "^1.27.13",
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-serve": "^1.0.1",
+    "rollup-plugin-terser": "^5.1.3"
+  },
+  "files": [
+    "src/**/*",
+    "dist/**/*"
+  ],
+  "homepage": "https://github.com/yaph/traste",
+  "keywords": [
+    "fingerboard",
+    "fret",
+    "fretboard",
+    "guitar",
+    "instrument",
+    "music",
+    "svg",
+    "uke",
+    "ukulele"
+  ],
+  "license": "MIT",
+  "main": "dist/fretboard.js",
+  "module": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yaph/fretboard.git"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "watch": "rollup -c -w",
+    "serve": "rollup -c rollup-serve.config.js -w"
+  },
+  "dependencies": {
+    "d3-selection": "^1.4.1"
+  }
+}
