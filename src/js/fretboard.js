@@ -1,5 +1,5 @@
 import {select as D3Select} from 'd3-selection';
-import {noteIndex, noteLabel, chromatic_scale, enharmonic_notes} from './notes.js';
+import {noteIndex, noteLabel, chromatic_scale, enharmonic_notes} from './notes';
 
 
 function drawCircle(parent, cx, cy, radius, fill='#cccccc', stroke=null, stroke_width=null, title=null) {

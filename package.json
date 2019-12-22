@@ -10,6 +10,9 @@
     "url": "https://github.com/yaph/traste/issues",
     "email": "code@ramiro.org"
   },
+  "dependencies": {
+    "d3-selection": "^1.4.1"
+  },
   "devDependencies": {
     "@babel/core": "^7.7.7",
     "@babel/preset-env": "^7.7.7",
@@ -45,8 +48,5 @@
     "build": "rollup -c",
     "watch": "rollup -c -w",
     "serve": "rollup -c rollup-serve.config.js -w"
-  },
-  "dependencies": {
-    "d3-selection": "^1.4.1"
   }
 }
