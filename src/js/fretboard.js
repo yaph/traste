@@ -1,3 +1,62 @@
+import {select as D3Select} from 'd3-selection';
+
+
+let chromatic_scale = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+let enharmonic_notes = {
+    'A': 'G##',
+    'A#': 'Bb',
+    'Ab': 'G#',
+    'B': 'Cb',
+    'B#': 'C',
+    'Bb': 'A#',
+    'C': 'B#',
+    'C#': 'Db',
+    'D': 'C##',
+    'D#': 'Eb',
+    'Db': 'C#',
+    'E#': 'F',
+    'Eb': 'D#',
+    'F': 'E#',
+    'F#': 'Gb',
+    'G': 'F##',
+    'G#': 'Ab',
+    'Gb': 'F#'
+};
+let instruments = {
+    guitar: {
+        roots: ['E', 'B', 'G', 'D', 'A', 'E'],
+        string_gauges: [0.01, 0.013, 0.017, 0.026, 0.036, 0.046],
+        fret_count: 15
+    },
+    ukulele: {
+        roots: ['A', 'E', 'C', 'G'],
+        string_gauges: [0.024, 0.031, 0.037, 0.026],
+        fret_count: 12
+    }
+}
+
+/**
+ * Return index position of note in chromatic scale.
+ * If a flat note is passed, the position of the enharmonic sharp is returned.
+ *
+ * @param {string} name - name of the note
+ * @returns {number} chromatic_scale array index
+ */
+function noteIndex(name) {
+    return name.endsWith('b') ? chromatic_scale.indexOf(enharmonic_notes[name]) : chromatic_scale.indexOf(name);
+}
+
+/**
+ * Return label for note with '-' replaced by '/'.
+ *
+ * @param {string} name - name of the note
+ * @returns {string} note label
+ */
+function noteLabel(name) {
+    return name.replace(/b/g, '♭').replace(/#/g, '♯');
+}
+
+
 function drawCircle(parent, cx, cy, radius, fill='#cccccc', stroke=null, stroke_width=null, title=null) {
     let circle = parent.append('svg:circle')
         .attr('cx', cx)
@@ -17,7 +76,7 @@ export function drawFretboard(selector, instrument='guitar', notes=chromatic_sca
     let string_gauges = selected_instrument.string_gauges;
     fret_count = fret_count || selected_instrument.fret_count;
 
-    let svg = d3.select(selector);
+    let svg = D3Select(selector);
     svg.selectAll('*').remove();
 
     let bbox = svg.node().parentElement.getBoundingClientRect();
@@ -28,7 +87,7 @@ export function drawFretboard(selector, instrument='guitar', notes=chromatic_sca
     let max_fret_distance = 140;
     let min_width = min_fret_distance * (fret_count + 1);
     let max_width = max_fret_distance * (fret_count + 1);
-    width = Math.min([max_width, Math.max([min_width, width])]);
+    width = Math.min(max_width, Math.max(min_width, width));
 
     // Calculate fret and string distances based on container width
     let fret_distance = width / (fret_count + 1);

@@ -6,13 +6,14 @@ import * as meta from './package.json';
 
 const config = {
     input: 'src/index.js',
-    //external: Object.keys(meta.dependencies),
+    external: Object.keys(meta.dependencies),
     output: {
         file: `dist/${meta.name}.js`,
         format: 'umd',
         name: 'traste',
-        indent: false,
-        extend: true,
+        globals: {
+            'd3-selection': 'd3'
+        },
         banner: `// ${meta.homepage} v${meta.version} Copyright ${(new Date).getFullYear()} ${meta.author.name}`
     },
     plugins: [
