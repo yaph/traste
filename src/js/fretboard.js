@@ -1,5 +1,5 @@
 import {select as D3Select} from 'd3-selection';
-import {noteIndex, noteLabel, chromatic_scale, enharmonic_notes} from './notes';
+import {noteAtPosition, noteIndex, noteLabel} from './notes';
 
 
 function drawCircle(parent, cx, cy, radius, fill='#cccccc', stroke=null, stroke_width=null, title=null) {
@@ -59,10 +59,6 @@ export function drawFretboard(selector, instrument, notes) {
     svg.attr('width', width).attr('height', height);
     let transform = `translate(${margin_horizontal}, ${margin_vertical})`;
 
-    // Background rectangle
-    //svg.append('defs').append('pattern').attr('id', 'bg-rect').append('image').attr('xlink:href', '/img/veneer.png');
-    //svg.append('rect').attr('x', 0).attr('y', 0).attr('width', width).attr('height', height).style('fill', "#eee");
-
     let g_frets = svg.append('g').attr('class', 'frets').attr('transform', transform);
     let g_fret_markers = svg.append('g').attr('class', 'fret-markers').attr('transform', transform);
     let g_strings = svg.append('g').attr('class', 'strings').attr('transform', transform);
@@ -120,22 +116,14 @@ export function drawFretboard(selector, instrument, notes) {
     }
 
     // draw notes
-    for (let i = 0; i < tuning.length; i++) {
-        let root_idx = noteIndex(tuning[i]);
-        for (let j = 0; j <= fret_count; j++) {
-            let note_index = (root_idx + j) % chromatic_scale.length;
-            let note = chromatic_scale[note_index];
-            if (!notes.includes(note)) {
-                let enharmonic_note = enharmonic_notes[note]
-                if (notes.includes(enharmonic_note)) {
-                    note = enharmonic_note;
-                } else {
-                    continue;
-                }
-            }
+    for (let string_idx = 0; string_idx < tuning.length; string_idx++) {
+        let root_idx = noteIndex(tuning[string_idx]);
+        for (let fret_idx = 0; fret_idx <= fret_count; fret_idx++) {
+            let note = noteAtPosition(root_idx, fret_idx, notes);
+            if (!note) continue;
 
-            let cx = j * fret_distance - fret_distance * 0.5;
-            let cy = i * string_distance;
+            let cx = fret_idx * fret_distance - fret_distance * 0.5;
+            let cy = string_idx * string_distance;
             let x = cx - note_font_size * 0.34;
             let y = cy + note_font_size * 0.34;
 

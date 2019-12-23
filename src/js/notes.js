@@ -1,5 +1,5 @@
-export let chromatic_scale = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
-export let enharmonic_notes = {
+let chromatic_scale = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+let enharmonic_notes = {
     'A': 'G##',
     'A#': 'Bb',
     'Ab': 'G#',
@@ -19,6 +19,29 @@ export let enharmonic_notes = {
     'G#': 'Ab',
     'Gb': 'F#'
 };
+
+/**
+ * Return note name for position relative to root note index in chromatic scale.
+ *
+ * If a list of notes is given, the determined note must be included.
+ *
+ * @param {number} root_index - root note index in chromatic scale
+ * @param {number} position - the number of frets away from the open string.
+ * @param {Object[]} [notes] - optional list of notes that must include the determined note.
+ */
+export function noteAtPosition(root_index, position, notes=[]) {
+    let note_index = (root_index + position) % chromatic_scale.length;
+    let note = chromatic_scale[note_index];
+    if (notes && !notes.includes(note)) {
+        let enharmonic = enharmonic_notes[note];
+        if (notes.includes(enharmonic)) {
+            note = enharmonic;
+        } else {
+            return;
+        }
+    }
+    return note;
+}
 
 /**
  * Return index position of note in chromatic scale.
