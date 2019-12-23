@@ -14,6 +14,10 @@ npm install traste
 // script
 ```
 
+## Demo
+
+* [Interactive Fretboard](https://guitarstreams.com/tool/fretboard/)
+
 ## License
 
 [MIT](LICENSE) © [Ramiro Gómez](https://ramiro.org/)
