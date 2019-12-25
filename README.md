@@ -10,9 +10,7 @@ npm install traste
 
 ## Usage
 
-```js
-// script
-```
+See the [examples directory](examples/).
 
 ## Demo
 
