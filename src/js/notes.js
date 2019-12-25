@@ -19,6 +19,20 @@ let enharmonic_notes = {
     'G#': 'Ab',
     'Gb': 'F#'
 };
+let note_colors = [
+    "#fb8072",
+    "#fccde5",
+    "#fdb462",
+    "#ffed6f",
+    "#ffffb3",
+    "#b3de69",
+    "#ccebc5",
+    "#80b1d3",
+    "#bc80bd",
+    "#8dd3c7",
+    "#bebada",
+    "#d9d9d9"
+];
 
 /**
  * Return note name for position relative to root note index in chromatic scale.
@@ -41,6 +55,26 @@ export function noteAtPosition(root_index, position, notes=[]) {
         }
     }
     return note;
+}
+
+/**
+ * Return a list of colors, one for each note in the given notes list.
+ *
+ * Different sets of colors are returned based on the number of notes.
+ *
+ * @param {Object[]} notes - list of notes
+ */
+export function noteColors(notes) {
+    switch (notes.length) {
+        case 3: // assume a triad
+            return [note_colors[0], note_colors[4], note_colors[6]];
+        case 4: // assume a seventh chord
+            return [note_colors[0], note_colors[4], note_colors[6], note_colors[9]];
+        case 5: // assume a ninth chord
+            return [note_colors[0], note_colors[4], note_colors[6], note_colors[9], note_colors[2]];
+        default:
+            return note_colors.slice(0, notes.length);
+    }
 }
 
 /**
