@@ -67,11 +67,13 @@ export function noteAtPosition(root_index, position, notes=[]) {
 export function noteColors(notes) {
     switch (notes.length) {
         case 3: // assume a triad
-            return [note_colors[0], note_colors[4], note_colors[6]];
+            return [note_colors[0], note_colors[4], note_colors[7]];
         case 4: // assume a seventh chord
-            return [note_colors[0], note_colors[4], note_colors[6], note_colors[9]];
+            return [note_colors[0], note_colors[4], note_colors[7], note_colors[11]];
         case 5: // assume a ninth chord
-            return [note_colors[0], note_colors[4], note_colors[6], note_colors[9], note_colors[2]];
+            return [note_colors[0], note_colors[4], note_colors[7], note_colors[11], note_colors[2]];
+        case 7: // assume a diatonic major scale
+            return [note_colors[0], note_colors[2], note_colors[4], note_colors[5], note_colors[7], note_colors[9], note_colors[11]];
         default:
             return note_colors.slice(0, notes.length);
     }
