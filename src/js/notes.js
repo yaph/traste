@@ -1,23 +1,24 @@
 let chromatic_scale = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 let enharmonic_notes = {
-    'A': 'G##',
-    'A#': 'Bb',
-    'Ab': 'G#',
-    'B': 'Cb',
-    'B#': 'C',
-    'Bb': 'A#',
-    'C': 'B#',
-    'C#': 'Db',
-    'D': 'C##',
-    'D#': 'Eb',
-    'Db': 'C#',
-    'E#': 'F',
-    'Eb': 'D#',
-    'F': 'E#',
-    'F#': 'Gb',
-    'G': 'F##',
-    'G#': 'Ab',
-    'Gb': 'F#'
+    'A': ['G##', 'Bbb'],
+    'A#': ['Bb'],
+    'Ab': ['G#', 'Cbb'],
+    'B': ['Cb'],
+    'B#': ['C'],
+    'Bb': ['A#'],
+    'C': ['B#', 'Dbb'],
+    'C#': ['Db'],
+    'D': ['C##', 'Ebb'],
+    'D#': ['Eb'],
+    'Db': ['C#'],
+    'E': ['Fb'],
+    'E#': ['F', 'Gbb'],
+    'Eb': ['D#'],
+    'F': ['E#', 'Gbb'],
+    'F#': ['Gb', 'E##'],
+    'G': ['F##', 'Abb'],
+    'G#': ['Ab', 'Cbb'],
+    'Gb': ['F#']
 };
 let note_colors = [
     "#fb8072",
@@ -47,12 +48,12 @@ export function noteAtPosition(root_index, position, notes=[]) {
     let note_index = (root_index + position) % chromatic_scale.length;
     let note = chromatic_scale[note_index];
     if (notes && !notes.includes(note)) {
-        let enharmonic = enharmonic_notes[note];
-        if (notes.includes(enharmonic)) {
-            note = enharmonic;
-        } else {
-            return;
+        for (let enharmonic of enharmonic_notes[note]) {
+            if (notes.includes(enharmonic)) {
+                return enharmonic;
+            }
         }
+        return;
     }
     return note;
 }
@@ -87,7 +88,14 @@ export function noteColors(notes) {
  * @returns {number} chromatic_scale array index
  */
 export function noteIndex(name) {
-    return name.endsWith('b') ? chromatic_scale.indexOf(enharmonic_notes[name]) : chromatic_scale.indexOf(name);
+    if (chromatic_scale.includes(name)) {
+        return chromatic_scale.indexOf(name);
+    }
+    for (let enharmonic of enharmonic_notes[name]) {
+        if (chromatic_scale.includes(enharmonic)) {
+            return chromatic_scale.indexOf(enharmonic);
+        }
+    }
 }
 
 /**
