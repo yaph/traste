@@ -2,8 +2,8 @@ let chromatic_scale = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#
 let enharmonic_notes = {
     'A': ['G##', 'Bbb'],
     'A#': ['Bb'],
-    'Ab': ['G#', 'Cbb'],
-    'B': ['Cb'],
+    'Ab': ['G#'],
+    'B': ['Cb', 'A##'],
     'B#': ['C'],
     'Bb': ['A#'],
     'C': ['B#', 'Dbb'],
@@ -11,13 +11,13 @@ let enharmonic_notes = {
     'D': ['C##', 'Ebb'],
     'D#': ['Eb'],
     'Db': ['C#'],
-    'E': ['Fb'],
-    'E#': ['F', 'Gbb'],
+    'E': ['Fb', 'D##'],
+    'E#': ['F'],
     'Eb': ['D#'],
     'F': ['E#', 'Gbb'],
-    'F#': ['Gb', 'E##'],
+    'F#': ['Gb'],
     'G': ['F##', 'Abb'],
-    'G#': ['Ab', 'Cbb'],
+    'G#': ['Ab'],
     'Gb': ['F#']
 };
 let note_colors = [
