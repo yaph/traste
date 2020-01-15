@@ -27,7 +27,7 @@ export function drawFretboard(selector, instrument, notes) {
     let width = bbox.width * 0.95;
 
     // Readjust width so the fretboard works for different screen sizes and fret counts
-    let min_fret_distance = 40;
+    let min_fret_distance = 26;
     let max_fret_distance = 140;
     let min_width = min_fret_distance * (fret_count + 1);
     let max_width = max_fret_distance * (fret_count + 1);
