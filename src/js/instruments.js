@@ -10,6 +10,6 @@ export let instruments = {
         tuning: ['A', 'E', 'C', 'G'],
         string_gauges: [0.024, 0.031, 0.037, 0.026],
         fret_count: 12,
-        fret_markers: [5, 7, 10, 12, 15]
+        fret_markers: [5, 7, 10, 12, 15, 17, 19]
     }
 };
