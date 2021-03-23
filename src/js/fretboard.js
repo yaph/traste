@@ -45,7 +45,6 @@ export function drawFretboard(selector, instrument, notes) {
 
     let height = string_distance * tuning.length + margin_vertical;
     let string_width = width - margin_horizontal * 1.2;
-    let fret_markers = [3, 5, 7, 9, 12, 15, 17, 19, 21, 24];
     let fret_height = string_distance * (tuning.length - 1);
     let fret_width = fret_distance * 0.06;
 
@@ -83,7 +82,7 @@ export function drawFretboard(selector, instrument, notes) {
     }
 
     // draw fret markers
-    for (let i of fret_markers) {
+    for (let i of instrument.fret_markers) {
         if (i > fret_count) {
             break;
         }
