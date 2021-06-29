@@ -8,14 +8,15 @@
     "email": "code@ramiro.org"
   },
   "dependencies": {
-    "d3-selection": "^2.0.0"
+    "@tonaljs/tonal": "^4.6.0",
+    "d3-selection": "^3.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.13.10",
-    "@babel/preset-env": "^7.13.12",
-    "rollup": "^2.42.3",
+    "@babel/core": "^7.14.6",
+    "@babel/preset-env": "^7.14.7",
+    "rollup": "^2.52.3",
     "rollup-plugin-babel": "^4.4.0",
-    "rollup-plugin-serve": "^1.0.3",
+    "rollup-plugin-serve": "^1.1.0",
     "rollup-plugin-terser": "^7.0.2"
   },
   "files": [
