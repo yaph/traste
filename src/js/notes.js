@@ -1,38 +1,22 @@
-let chromatic_scale = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
-let enharmonic_notes = {
-    'A': ['G##', 'Bbb'],
-    'A#': ['Bb'],
-    'Ab': ['G#'],
-    'B': ['Cb', 'A##'],
-    'B#': ['C'],
-    'Bb': ['A#'],
-    'C': ['B#', 'Dbb'],
-    'C#': ['Db'],
-    'D': ['C##', 'Ebb'],
-    'D#': ['Eb'],
-    'Db': ['C#'],
-    'E': ['Fb', 'D##'],
-    'E#': ['F'],
-    'Eb': ['D#'],
-    'F': ['E#', 'Gbb'],
-    'F#': ['Gb'],
-    'G': ['F##', 'Abb'],
-    'G#': ['Ab'],
-    'Gb': ['F#']
-};
+import {Note as TonalNote} from '@tonaljs/tonal';
+
+let chromatic_scale = ['A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#'];
+
+// 7 qualitative colors from https://colorbrewer2.org/#type=qualitative&scheme=Set3&n=7 for natural notes
+// flats/sharps are assigned the color in between with using https://gka.github.io/palettes/
 let note_colors = [
-    "#fb8072",
-    "#fccde5",
-    "#fdb462",
-    "#ffed6f",
-    "#ffffb3",
-    "#b3de69",
-    "#ccebc5",
-    "#80b1d3",
-    "#bc80bd",
-    "#8dd3c7",
-    "#bebada",
-    "#d9d9d9"
+    '#8dd3c7',
+    '#cae9be',
+    '#ffffb3',
+    '#bebada',
+    '#e49ea5',
+    '#fb8072',
+    '#cc9ba2',
+    '#80b1d3',
+    '#fdb462',
+    '#dbca65',
+    '#b3de69',
+    '#a5d89a'
 ];
 
 /**
@@ -48,9 +32,9 @@ export function noteAtPosition(root_index, position, notes=[]) {
     let note_index = (root_index + position) % chromatic_scale.length;
     let note = chromatic_scale[note_index];
     if (notes && !notes.includes(note)) {
-        for (let enharmonic of enharmonic_notes[note]) {
-            if (notes.includes(enharmonic)) {
-                return enharmonic;
+        for (let name of notes) {
+            if (note == TonalNote.enharmonic(name)) {
+                return name;
             }
         }
         return;
@@ -61,23 +45,14 @@ export function noteAtPosition(root_index, position, notes=[]) {
 /**
  * Return a list of colors, one for each note in the given notes list.
  *
- * Different sets of colors are returned based on the number of notes.
- *
  * @param {Object[]} notes - list of notes
  */
 export function noteColors(notes) {
-    switch (notes.length) {
-        case 3: // assume a triad
-            return [note_colors[0], note_colors[4], note_colors[7]];
-        case 4: // assume a seventh chord
-            return [note_colors[0], note_colors[4], note_colors[7], note_colors[11]];
-        case 5: // assume a ninth chord
-            return [note_colors[0], note_colors[4], note_colors[7], note_colors[11], note_colors[2]];
-        case 7: // assume a diatonic major scale
-            return [note_colors[0], note_colors[2], note_colors[4], note_colors[5], note_colors[7], note_colors[9], note_colors[11]];
-        default:
-            return note_colors.slice(0, notes.length);
+    let colors = [];
+    for (let note of notes) {
+        colors.push(note_colors[noteIndex(note)]);
     }
+    return colors;
 }
 
 /**
@@ -91,10 +66,9 @@ export function noteIndex(name) {
     if (chromatic_scale.includes(name)) {
         return chromatic_scale.indexOf(name);
     }
-    for (let enharmonic of enharmonic_notes[name]) {
-        if (chromatic_scale.includes(enharmonic)) {
-            return chromatic_scale.indexOf(enharmonic);
-        }
+    const enharmonic = TonalNote.enharmonic(name);
+    if (chromatic_scale.includes(enharmonic)) {
+        return chromatic_scale.indexOf(enharmonic);
     }
 }
 
