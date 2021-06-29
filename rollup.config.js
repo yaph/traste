@@ -12,7 +12,8 @@ const config = {
         format: 'umd',
         name: 'traste',
         globals: {
-            'd3-selection': 'd3'
+            'd3-selection': 'd3',
+            '@tonaljs/tonal': 'Tonal'
         },
         banner: `// ${meta.homepage} v${meta.version} Copyright ${(new Date).getFullYear()} ${meta.author.name}`
     },
