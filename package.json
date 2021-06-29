@@ -1,7 +1,7 @@
 {
   "name": "traste",
   "description": "A library for rendering guitar and ukulele fretboards as SVG elements.",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "author": "Ramiro Gómez (https://ramiro.org/)",
   "bugs": {
     "url": "https://github.com/yaph/traste/issues",
