@@ -134,7 +134,7 @@ export function drawFretboard(selector, instrument, notes) {
             g_notes.append('svg:text')
                 .attr('x', cx)
                 .attr('y', cy)
-                .attr('dy', '0.33em')
+                .attr('dy', '0.38em')
                 .attr('fill', '#000000')
                 .style('text-anchor', `middle`)
                 .style('font-size', `${font_size}px`)
