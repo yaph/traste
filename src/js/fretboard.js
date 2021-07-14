@@ -1,5 +1,5 @@
 import {select as D3Select} from 'd3-selection';
-import {noteAtPosition, noteIndex, noteLabel} from './notes';
+import {noteAtPosition, noteColor, noteIndex, noteLabel} from './notes';
 
 
 function drawCircle(parent, cx, cy, radius, fill='#cccccc', stroke=null, stroke_width=null, title=null) {
@@ -129,7 +129,7 @@ export function drawFretboard(selector, instrument, notes) {
             const cx = fret_idx * fret_distance - fret_distance * 0.5;
             const cy = string_idx * string_distance;
 
-            drawCircle(g_notes, cx, cy, note_radius, '#ffffff', '#999999', note_stroke_width, note);
+            drawCircle(g_notes, cx, cy, note_radius, noteColor(note), '#999999', note_stroke_width, note);
 
             g_notes.append('svg:text')
                 .attr('x', cx)

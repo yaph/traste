@@ -43,11 +43,21 @@ export function noteAtPosition(root_index, position, notes=[]) {
 }
 
 /**
+ * Return the color for the given note.
+ *
+ * @param {string} note - note name
+ */
+export function noteColor(note) {
+    return note_colors[noteIndex(note)];
+}
+
+/**
+ * @deprecated
  * Return a list of colors, one for each note in the given notes list.
  *
  * @param {Object[]} notes - list of notes
  */
-export function noteColors(notes) {
+ export function noteColors(notes) {
     let colors = [];
     for (let note of notes) {
         colors.push(note_colors[noteIndex(note)]);
