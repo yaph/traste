@@ -6,16 +6,21 @@
 </head>
 <body>
 <h1>Example Fretboards</h1>
-<h2>Guitar Am Chord Positions</h2>
-<svg id="fretboard-guitar" class="fretboard"></svg>
-<h2>Ukulele Eb Chord Positions</h2>
-<svg id="fretboard-ukulele" class="fretboard"></svg>
+<h2>Guitar C Major Scale</h2>
+<svg id="fretboard-guitar-c-scale" class="fretboard"></svg>
+<h2>Ukulele A#7 Chord</h2>
+<svg id="fretboard-ukulele-a-sharp-7-chord" class="fretboard"></svg>
+<h2>Ukulele Gb7 Chord</h2>
+<svg id="fretboard-ukulele-gb7-chord" class="fretboard"></svg>
+
 <script src="../node_modules/d3-selection/dist/d3-selection.js"></script>
 <script src="../node_modules/@tonaljs/tonal/browser/tonal.min.js"></script>
 <script src="../dist/traste.js"></script>
+
 <script>
-traste.drawFretboard('#fretboard-guitar', traste.instruments.guitar, ['A', 'C', 'E']);
-traste.drawFretboard('#fretboard-ukulele', traste.instruments.ukulele, ['Eb', 'G', 'Bb']);
+traste.drawFretboard('#fretboard-guitar-c-scale', traste.instruments.guitar, ['C', 'D', 'E', 'F', 'G', 'A', 'B']);
+traste.drawFretboard('#fretboard-ukulele-a-sharp-7-chord', traste.instruments.ukulele, ['A#', 'C##', 'E#', 'G#']);
+traste.drawFretboard('#fretboard-ukulele-gb7-chord', traste.instruments.ukulele, ['Gb', 'Bb', 'Db', 'Fb']);
 </script>
 </body>
 </html>
