@@ -138,6 +138,7 @@ export function drawFretboard(selector, instrument, notes) {
                 .attr('fill', '#000000')
                 .style('text-anchor', `middle`)
                 .style('font-size', `${font_size}px`)
+                .style('font-family', 'Roboto,Ubuntu,Helvetica,Arial,sans-serif')
                 .text(label);
         }
     }
