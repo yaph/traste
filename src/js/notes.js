@@ -52,20 +52,6 @@ export function noteColor(note) {
 }
 
 /**
- * @deprecated
- * Return a list of colors, one for each note in the given notes list.
- *
- * @param {Object[]} notes - list of notes
- */
- export function noteColors(notes) {
-    let colors = [];
-    for (let note of notes) {
-        colors.push(note_colors[noteIndex(note)]);
-    }
-    return colors;
-}
-
-/**
  * Return index position of note in chromatic scale.
  * If a flat note is passed, the position of the enharmonic sharp is returned.
  *
