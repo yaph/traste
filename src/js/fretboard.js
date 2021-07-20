@@ -15,7 +15,7 @@ function drawCircle(parent, cx, cy, radius, fill='#cccccc', stroke=null, stroke_
 }
 
 
-export function drawFretboard(selector, instrument, notes) {
+export function drawFretboard(selector, instrument, notes, width=null) {
     const tuning = instrument.tuning;
     const string_gauges = instrument.string_gauges;
     const fret_count = instrument.fret_count;
@@ -23,15 +23,15 @@ export function drawFretboard(selector, instrument, notes) {
     const svg = D3Select(selector);
     svg.selectAll('*').remove();
 
-    const bbox = svg.node().parentElement.getBoundingClientRect();
-    let width = bbox.width * 0.95;
+    if (width === null) {
+        const bbox = svg.node().parentElement.getBoundingClientRect();
+        width = bbox.width * 0.95;
+    }
 
     // Readjust width so the fretboard works for different screen sizes and fret counts
     const min_fret_distance = 26;
-    const max_fret_distance = 140;
     const min_width = min_fret_distance * (fret_count + 1);
-    const max_width = max_fret_distance * (fret_count + 1);
-    width = Math.min(max_width, Math.max(min_width, width));
+    width = Math.max(min_width, width);
 
     // Calculate fret and string distances based on container width
     const fret_distance = width / (fret_count + 1);
