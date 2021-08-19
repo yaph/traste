@@ -12,6 +12,8 @@
 <svg id="fretboard-ukulele-a-sharp-7-chord" class="fretboard"></svg>
 <h2>Ukulele Gb7 Chord with fixed width</h2>
 <svg id="fretboard-ukulele-gb7-chord" class="fretboard"></svg>
+<h2>Ukulele All Notes</h2>
+<svg id="fretboard-ukulele-all" class="fretboard"></svg>
 
 <script src="../node_modules/d3-selection/dist/d3-selection.js"></script>
 <script src="../node_modules/@tonaljs/tonal/browser/tonal.min.js"></script>
@@ -21,6 +23,10 @@
 traste.drawFretboard('#fretboard-guitar-c-scale', traste.instruments.guitar, ['C', 'D', 'E', 'F', 'G', 'A', 'B']);
 traste.drawFretboard('#fretboard-ukulele-a-sharp-7-chord', traste.instruments.ukulele, ['A#', 'C##', 'E#', 'G#']);
 traste.drawFretboard('#fretboard-ukulele-gb7-chord', traste.instruments.ukulele, ['Gb', 'Bb', 'Db', 'Fb'], 1200);
+
+const instrument = traste.instruments.ukulele;
+instrument.fret_count = 4;
+traste.drawFretboard('#fretboard-ukulele-all', instrument, ['C', 'D', 'Db', 'E', 'Eb', 'F', 'G', 'Gb', 'A', 'Ab', 'B', 'Bb']);
 </script>
 </body>
 </html>
