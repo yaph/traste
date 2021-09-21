@@ -8,13 +8,13 @@
     "email": "code@ramiro.org"
   },
   "dependencies": {
-    "@tonaljs/tonal": "^4.6.2",
+    "@tonaljs/tonal": "^4.6.5",
     "d3-selection": "^3.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.14.6",
-    "@babel/preset-env": "^7.14.7",
-    "rollup": "^2.52.4",
+    "@babel/core": "^7.15.5",
+    "@babel/preset-env": "^7.15.6",
+    "rollup": "^2.56.3",
     "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-serve": "^1.1.0",
     "rollup-plugin-terser": "^7.0.2"
