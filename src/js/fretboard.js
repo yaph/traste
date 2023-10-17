@@ -18,9 +18,7 @@ function drawCircle(parent, cx, cy, radius, fill='#cccccc', stroke=null, stroke_
 }
 
 
-function drawNotes(selector, notes) {
-    const g_notes = D3Select(selector).select('g.notes');
-
+function drawNotes(notes) {
     for (let string_idx = 0; string_idx < UI.tuning.length; string_idx++) {
         const root_idx = noteIndex(UI.tuning[string_idx]);
         for (let fret_idx = 0; fret_idx <= UI.fret_count; fret_idx++) {
@@ -35,9 +33,9 @@ function drawNotes(selector, notes) {
             const cx = fret_idx * UI.fret_distance - UI.fret_distance * 0.5;
             const cy = string_idx * UI.string_distance;
 
-            drawCircle(g_notes, cx, cy, UI.note_radius, noteColor(note), '#999999', UI.note_radius * 0.1, note);
+            drawCircle(UI.notes, cx, cy, UI.note_radius, noteColor(note), '#999999', UI.note_radius * 0.1, note);
 
-            g_notes.append('svg:text')
+            UI.notes.append('svg:text')
                 .attr('x', cx)
                 .attr('y', cy)
                 .attr('dy', '0.38em')
@@ -91,7 +89,8 @@ export function drawFretboard(selector, instrument, notes, width=null) {
     const g_frets = svg.append('g').attr('class', 'frets').attr('transform', transform);
     const g_fret_markers = svg.append('g').attr('class', 'fret-markers').attr('transform', transform);
     const g_strings = svg.append('g').attr('class', 'strings').attr('transform', transform);
-    const g_notes = svg.append('g').attr('class', 'notes').attr('transform', transform);
+
+    UI.notes = svg.append('g').attr('class', 'notes').attr('transform', transform);
 
     // draw frets
     for (let i = 0; i <= UI.fret_count; i++) {
@@ -144,5 +143,5 @@ export function drawFretboard(selector, instrument, notes, width=null) {
             .append('title').text(root);
     }
 
-    drawNotes(selector, notes);
+    drawNotes(notes);
 }
