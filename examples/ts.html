@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Guitar and Ukulele Example Fretboards</title>
+</head>
+<body>
+<h1>Example Fretboard</h1>
+<svg id="fretboard" class="fretboard"></svg>
+
+<script src="../dist/traste.ts.js"></script>
+
+<script>
+    const fretboard = new traste.Fretboard(traste.ukulele);
+    fretboard.draw('#fretboard');
+</script>
+
+</body>
+</html>

@@ -145,3 +145,99 @@ export function drawFretboard(selector, instrument, notes, width=null) {
 
     drawNotes(notes);
 }
+
+
+
+export function fretboard(selector, config) {
+
+    const svg = D3Select(selector);
+    svg.selectAll('*').remove();
+
+    if (typeof(config.width) === 'undefined') {
+        config.width = svg.node().parentElement.getBoundingClientRect() * 0.95;
+    }
+
+    // Set width so the fretboard works for different screen sizes and fret counts
+    const width = Math.max(26 * (config.fret_count + 1), config.width);
+
+    // Calculate fret and string distances based on container width
+    config.fret_distance = width / (config.fret_count + 1);
+    config.string_distance = config.fret_distance * 0.65;
+    config.note_radius = config.fret_distance * 0.23;
+
+    // Calculate paddings and margins based on fret and string distances
+    const string_padding = config.string_distance * 0.1;
+    const fret_padding = config.fret_distance * 0.01;
+    const margin_horizontal = config.fret_distance * 0.8;
+    const margin_vertical = config.string_distance * 0.5;
+
+    const height = config.string_distance * config.tuning.length + margin_vertical;
+    const string_width = width - margin_horizontal * 1.2;
+    const fret_height = config.string_distance * (config.tuning.length - 1);
+    const fret_width = config.fret_distance * 0.06;
+    const fret_marker_radius = config.note_radius * 0.3;
+
+    // Setup SVG
+    svg.attr('width', width).attr('height', height);
+    const transform = `translate(${margin_horizontal}, ${margin_vertical})`;
+
+    const drawing = {
+        frets: svg.append('g').attr('class', 'frets').attr('transform', transform),
+        fret_markers: svg.append('g').attr('class', 'fret-markers').attr('transform', transform),
+        strings: svg.append('g').attr('class', 'strings').attr('transform', transform),
+        notes: svg.append('g').attr('class', 'notes').attr('transform', transform)
+    }
+
+    // draw frets
+    for (let i = 0; i <= config.fret_count; i++) {
+        let offset = i * config.fret_distance;
+
+        // make nut a little wider
+        let stroke_width = fret_width;
+        if (0 == i) stroke_width *= 1.5;
+
+        drawing.frets.append('svg:line')
+            .attr('x1', offset)
+            .attr('y1', -string_padding / 2)
+            .attr('x2', offset)
+            .attr('y2', fret_height + string_padding)
+            .style('stroke', '#222222')
+            .style('stroke-width', stroke_width)
+            .append('title').text(i);
+    }
+
+    // draw fret markers
+    for (let i of instrument.fret_markers) {
+        if (i > config.fret_count) {
+            break;
+        }
+
+        let cx = i * config.fret_distance - config.fret_distance / 2;
+        let cy = height - margin_vertical - fret_marker_radius * 3;
+
+        if (0 == i % 12) {
+            const offset = fret_marker_radius * 1.3;
+            drawCircle(g_fret_markers, cx + offset, cy, fret_marker_radius);
+            // make sure the next circle is offset in the other direction
+            cx -= offset;
+        }
+
+        drawCircle(drawing.fret_markers, cx, cy, fret_marker_radius);
+    }
+
+    // draw strings
+    for (let i = 0; i < config.tuning.length; i++) {
+        const root = config.tuning[i];
+        const offset = i * config.string_distance;
+        drawing.strings.append('svg:line')
+            .attr('x1', -fret_padding / 2)
+            .attr('y1', offset)
+            .attr('x2', string_width + fret_padding)
+            .attr('y2', offset)
+            .style('stroke', '#444444')
+            .style('stroke-width', instrument.string_gauges[i] * config.string_distance)
+            .append('title').text(root);
+    }
+
+    drawNotes(drawing, notes);
+}
