@@ -3,8 +3,23 @@ import { select as D3Select } from 'd3-selection';
 import { Instrument } from './instruments';
 
 
+function boardWidth(svg: any, fret_count: number, width?: number): number {
+    if (typeof width === 'undefined') {
+        const node = svg.node() as HTMLElement;
+        if (node && node.parentElement) {
+            width = node.parentElement.getBoundingClientRect().width * 0.95;
+        } else {
+            width = -1;
+        }
+    }
+    // Readjust width so the fretboard works for different screen sizes and fret counts
+    const min_width = 26 * (fret_count + 1);
+    return Math.max(min_width, width);
+}
+
+
 function drawCircle(parent: any, cx: number, cy: number, radius: number,
-                    fill: string='#cccccc', stroke?: string, stroke_width?: number, title?: string) {
+    fill: string='#cccccc', stroke?: string, stroke_width?: number, title?: string) {
 
     const circle = parent.append('svg:circle')
         .attr('cx', cx)
@@ -27,14 +42,11 @@ export class Fretboard {
         const svg = D3Select(selector);
         svg.selectAll('*').remove();
 
-        if (typeof width === 'undefined') {
-            const bbox = svg.node().parentElement.getBoundingClientRect();
-            width = bbox.width * 0.95;
+        width = boardWidth(svg, this.instrument.fret_count, width);
+        if (width == -1) {
+            console.log(`No element found using selector: ${selector}`);
+            return;
         }
-
-        // Readjust width so the fretboard works for different screen sizes and fret counts
-        const min_width = 26 * (this.instrument.fret_count + 1);
-        width = Math.max(min_width, width);
 
         // Calculate fret and string distances based on container width
         const fret_distance = width / (this.instrument.fret_count + 1);
@@ -63,8 +75,10 @@ export class Fretboard {
         const g_notes = svg.append('g').attr('class', 'notes').attr('transform', transform);
 
         // draw frets
+        const y1 = -string_padding / 2;
+        const y2 = fret_height + string_padding;
         for (let i = 0; i <= this.instrument.fret_count; i++) {
-            let offset = i * fret_distance;
+            const offset = i * fret_distance;
 
             // make nut a little wider
             let stroke_width = fret_width;
@@ -72,45 +86,46 @@ export class Fretboard {
 
             g_frets.append('svg:line')
                 .attr('x1', offset)
-                .attr('y1', -string_padding / 2)
+                .attr('y1', y1)
                 .attr('x2', offset)
-                .attr('y2', fret_height + string_padding)
+                .attr('y2', y2)
                 .style('stroke', '#222222')
                 .style('stroke-width', stroke_width)
                 .append('title').text(i);
         }
 
         // draw fret markers
+        const cy = height - margin_vertical - fret_marker_radius * 3;
         for (let i of this.instrument.fret_markers) {
             if (i > this.instrument.fret_count) {
                 break;
             }
+            let cx = i * fret_distance - fret_distance / 2;
 
-        let cx = i * fret_distance - fret_distance / 2;
-        let cy = height - margin_vertical - fret_marker_radius * 3;
-
-        if (0 == i % 12) {
-            const offset = fret_marker_radius * 1.3;
-            drawCircle(g_fret_markers, cx + offset, cy, fret_marker_radius);
-            // make sure the next circle is offset in the other direction
-            cx -= offset;
+            // draw a second marker for multiples of 12 (an octave)
+            if (0 == i % 12) {
+                const offset = fret_marker_radius * 1.3;
+                drawCircle(g_fret_markers, cx + offset, cy, fret_marker_radius);
+                // make sure the next circle is offset in the other direction
+                cx -= offset;
+            }
+            drawCircle(g_fret_markers, cx, cy, fret_marker_radius);
         }
 
-        drawCircle(g_fret_markers, cx, cy, fret_marker_radius);
-    }
-
-    // draw strings
-    for (let i = 0; i < this.instrument.tuning.length; i++) {
-        const root = this.instrument.tuning[i];
-        const offset = i * string_distance;
-        g_strings.append('svg:line')
-            .attr('x1', -fret_padding / 2)
-            .attr('y1', offset)
-            .attr('x2', string_width + fret_padding)
-            .attr('y2', offset)
-            .style('stroke', '#444444')
-            .style('stroke-width', this.instrument.string_gauges[i] * string_distance)
-            .append('title').text(root);
-    }
+        // draw strings
+        const x1 = -fret_padding / 2;
+        const x2 = string_width + fret_padding;
+        for (let i = 0; i < this.instrument.tuning.length; i++) {
+            const root = this.instrument.tuning[i];
+            const offset = i * string_distance;
+            g_strings.append('svg:line')
+                .attr('x1', x1)
+                .attr('y1', offset)
+                .attr('x2', x2)
+                .attr('y2', offset)
+                .style('stroke', '#444444')
+                .style('stroke-width', this.instrument.string_gauges[i] * string_distance)
+                .append('title').text(root);
+        }
     }
 }

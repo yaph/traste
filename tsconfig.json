@@ -3,6 +3,7 @@
     "target": "es2020",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
+    "module":"nodenext",
     "moduleResolution":"nodenext",
     "strict": true,
     "skipLibCheck": true
