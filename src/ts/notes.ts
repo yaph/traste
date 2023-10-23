@@ -1,4 +1,4 @@
-import {Note as TonalNote} from '@tonaljs/tonal';
+import { Note as TonalNote } from '@tonaljs/tonal';
 
 let chromatic_scale = ['A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#'];
 
@@ -24,20 +24,24 @@ let note_colors = [
  *
  * If a list of notes is given, the determined note must be included.
  *
- * @param {number} root_index - root note index in chromatic scale
- * @param {number} position - the number of frets away from the open string.
- * @param {Object[]} [notes] - optional list of notes that must include the determined note.
+ * @param root_index - root note index in chromatic scale
+ * @param position - the number of frets away from the open string.
+ * @param notes - optional list of notes that must include the determined note.
  */
-export function noteAtPosition(root_index, position, notes=[]) {
-    let note_index = (root_index + position) % chromatic_scale.length;
-    let note = chromatic_scale[note_index];
-    if (notes && !notes.includes(note)) {
+export function noteAtPosition(root_index: number, position: number, notes?: Array<string>): string|null {
+    const note_index = (root_index + position) % chromatic_scale.length;
+    const note = chromatic_scale[note_index];
+
+    if (notes) {
+        if (notes.includes(note)) {
+            return note;
+        }
         for (let name of notes) {
             if (note == TonalNote.enharmonic(name)) {
                 return name;
             }
         }
-        return;
+        return null;
     }
     return note;
 }
@@ -47,9 +51,10 @@ export function noteAtPosition(root_index, position, notes=[]) {
  *
  * @param {string} note - note name
  */
-export function noteColor(note) {
+export function noteColor(note: string) {
     return note_colors[noteIndex(note)];
 }
+
 
 /**
  * Return index position of note in chromatic scale.
@@ -58,15 +63,20 @@ export function noteColor(note) {
  * @param {string} name - name of the note
  * @returns {number} chromatic_scale array index
  */
-export function noteIndex(name) {
-    if (chromatic_scale.includes(name)) {
-        return chromatic_scale.indexOf(name);
+export function noteIndex(name: string): number {
+    const note = TonalNote.get(name);
+    if (note.letter) {
+        if (chromatic_scale.includes(note.letter)) {
+            return chromatic_scale.indexOf(note.letter);
+        }
+        const enharmonic = TonalNote.enharmonic(name);
+        if (chromatic_scale.includes(enharmonic)) {
+            return chromatic_scale.indexOf(enharmonic);
+        }
     }
-    const enharmonic = TonalNote.enharmonic(name);
-    if (chromatic_scale.includes(enharmonic)) {
-        return chromatic_scale.indexOf(enharmonic);
-    }
+    throw Error(`Note unknown: ${name}`);
 }
+
 
 /**
  * Return note label for display.
@@ -74,6 +84,6 @@ export function noteIndex(name) {
  * @param {string} name - name of the note
  * @returns {string} note label
  */
-export function noteLabel(name) {
+export function noteLabel(name: string): string {
     return name.replace(/b/g, '♭').replace(/#/g, '♯');
 }
