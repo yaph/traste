@@ -38,26 +38,22 @@ export class Fretboard {
     }
 
 
-    boardWidth(width?: number): number {
-        if (typeof width === 'undefined') {
-            const node = this.svg.node() as HTMLElement;
-            if (node && node.parentElement) {
-                width = node.parentElement.getBoundingClientRect().width * 0.95;
-            } else {
-                throw Error('Element not found');
-            }
+    boardWidth(container: any, width?: number): number {
+        if (container.empty()) {
+            throw Error('Element not found');
         }
-        // Adjust width so the fretboard works for different screen sizes and fret counts
+        if (typeof width === 'undefined') {
+            const node = container.node() as HTMLElement;
+            width = node.getBoundingClientRect().width * 0.95;
+        }
         const min_width = 26 * (this.instrument.fret_count + 1);
         return Math.max(min_width, width);
     }
 
 
     draw(selector: string, width?: number): void {
-        const svg = D3Select(selector);
-        svg.selectAll('*').remove();
-
-        width = this.boardWidth(width);
+        const parent = D3Select(selector);
+        width = this.boardWidth(parent);
 
         // Calculate fret and string distances based on container width
         const fret_distance = width / (this.instrument.fret_count + 1);
@@ -68,25 +64,27 @@ export class Fretboard {
         const margin_vertical = string_distance * 0.5;
         const height = string_distance * this.instrument.tuning.length + margin_vertical;
 
-        svg.attr('width', width).attr('height', height);
+        // Setup SVG element
+        this.svg = parent.append('svg').attr('class', 'fretboard');
+        this.svg.attr('width', width).attr('height', height);
 
         // Set object properties, that are accessed in other methods
-        this.svg = svg;
         this.transform = `translate(${margin_horizontal}, ${margin_vertical})`;
         this.dim = {
             fret_distance: fret_distance,
             string_distance: string_distance
         }
 
-        this.drawFrets(string_distance * (this.instrument.tuning.length - 1));
+        this.drawFrets();
         this.drawFretMarkers(height - margin_vertical);
         this.drawStrings(width - margin_horizontal * 1.2);
     }
 
 
-    drawFrets(height: number) {
+    drawFrets() {
         const g_frets = this.g('frets');
 
+        const height = this.dim.string_distance * (this.instrument.tuning.length - 1);
         const width = this.dim.fret_distance * 0.06;
         const padding = height * 0.03;
         const y1 = -padding / 2;
@@ -156,6 +154,9 @@ export class Fretboard {
     }
 
 
+    /**
+     * Draw notes as circles on the fretboard. If no notes are passed as input, all notes will be drawn.
+     */
     drawNotes(notes?: Array<string>) {
         const g_notes = this.g('notes');
         const radius = this.dim.fret_distance * 0.23;
