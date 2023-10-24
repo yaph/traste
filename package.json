@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@tonaljs/tonal": "^4.6.5",
+    "cromatica": "^0.3.0",
     "d3-selection": "^3.0.0"
   },
   "devDependencies": {
