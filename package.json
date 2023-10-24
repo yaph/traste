@@ -13,11 +13,12 @@
     "d3-selection": "^3.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.15.5",
-    "@babel/preset-env": "^7.15.6",
     "@types/d3-selection": "^3.0.8",
     "esbuild": "^0.19.5",
     "nodemon": "^3.0.1"
+  },
+  "directories": {
+    "example": "examples"
   },
   "files": [
     "src/**/*",
@@ -43,11 +44,8 @@
     "url": "git+https://github.com/yaph/traste.git"
   },
   "scripts": {
-    "build": "esbuild src/index.ts --outfile=dist/traste.js --bundle --global-name=traste",
+    "build": "esbuild src/index.ts --outfile=dist/traste.js --bundle --format=iife --global-name=traste",
     "watch": "nodemon -e ts -w src/ts -x 'npm run build'",
-    "serve": "esbuild --servedir=. --bundle --global-name=traste"
-  },
-  "directories": {
-    "example": "examples"
+    "serve": "esbuild --servedir=."
   }
 }
