@@ -9,6 +9,10 @@ type Dimension = {
     [key: string]: number;
 };
 
+type Group = {
+    [key: string]: any;
+};
+
 
 function drawCircle(parent: any, cx: number, cy: number, radius: number,
     fill: string='#cccccc', stroke?: string, stroke_width?: number, title?: string) {
@@ -27,18 +31,13 @@ function drawCircle(parent: any, cx: number, cy: number, radius: number,
 
 export class Fretboard {
     private svg: any
-    private transform: string = 'translate(0, 0)'
     private dim: Dimension = {}
+    private g: Group = {}
 
     constructor(private instrument: Instrument) {}
 
-    // Shorthand for adding group to SVG
-    g(name: string): any {
-        return this.svg.append('g').attr('class', name).attr('transform', this.transform);
-    }
 
-
-    boardWidth(container: any, width?: number): number {
+    private boardWidth(container: any, width?: number): number {
         if (container.empty()) {
             throw Error('Element not found');
         }
@@ -69,10 +68,17 @@ export class Fretboard {
         this.svg.attr('width', width).attr('height', height);
 
         // Set object properties, that are accessed in other methods
-        this.transform = `translate(${margin_horizontal}, ${margin_vertical})`;
         this.dim = {
             fret_distance: fret_distance,
-            string_distance: string_distance
+            string_distance: string_distance,
+            note_radius: fret_distance * 0.23,
+            fret_marker_radius: fret_distance * 0.069
+        }
+
+        // Initialize groups as object properties.
+        const transform = `translate(${margin_horizontal}, ${margin_vertical})`;
+        for (let name of ['frets', 'fret_markers', 'strings', 'notes']) {
+            this.g[name] = this.svg.append('g').attr('class', name).attr('transform', transform);
         }
 
         this.drawFrets();
@@ -81,9 +87,7 @@ export class Fretboard {
     }
 
 
-    drawFrets() {
-        const g_frets = this.g('frets');
-
+    private drawFrets() {
         const height = this.dim.string_distance * (this.instrument.tuning.length - 1);
         const width = this.dim.fret_distance * 0.06;
         const padding = height * 0.03;
@@ -97,7 +101,7 @@ export class Fretboard {
             let stroke_width = width;
             if (0 == i) stroke_width *= 1.5;
 
-            g_frets.append('svg:line')
+            this.g.frets.append('svg:line')
                 .attr('x1', offset)
                 .attr('y1', y1)
                 .attr('x2', offset)
@@ -109,11 +113,8 @@ export class Fretboard {
     }
 
 
-    drawFretMarkers(pos_bottom: number) {
-        const g_fret_markers = this.g('fret-markers');
-
-        const radius = this.dim.fret_distance * 0.069;
-        const cy = pos_bottom - radius * 3;
+    private drawFretMarkers(pos_bottom: number) {
+        const cy = pos_bottom - this.dim.fret_marker_radius * 3;
 
         for (let i of this.instrument.fret_markers) {
             if (i > this.instrument.fret_count) {
@@ -123,26 +124,24 @@ export class Fretboard {
 
             // draw a second marker for multiples of 12 (an octave)
             if (0 == i % 12) {
-                const offset = radius * 1.3;
-                drawCircle(g_fret_markers, cx + offset, cy, radius);
+                const offset = this.dim.fret_marker_radius * 1.3;
+                drawCircle(this.g.fret_markers, cx + offset, cy, this.dim.fret_marker_radius);
                 // make sure the next circle is offset in the other direction
                 cx -= offset;
             }
-            drawCircle(g_fret_markers, cx, cy, radius);
+            drawCircle(this.g.fret_markers, cx, cy, this.dim.fret_marker_radius);
         }
     }
 
 
-    drawStrings(width: number) {
-        const g_strings = this.g('strings');
-
+    private drawStrings(width: number) {
         const padding = this.dim.fret_distance * 0.01;
         const x1 = -padding / 2;
         const x2 = width + padding;
 
         for (let i = 0; i < this.instrument.tuning.length; i++) {
             const offset = i * this.dim.string_distance;
-            g_strings.append('svg:line')
+            this.g.strings.append('svg:line')
                 .attr('x1', x1)
                 .attr('y1', offset)
                 .attr('x2', x2)
@@ -155,38 +154,43 @@ export class Fretboard {
 
 
     /**
+     * Draw given note at given string and fret indexes.
+     */
+    drawNoteAtPosition(note: string, string_idx: number, fret_idx: number) {
+        const cy = string_idx * this.dim.string_distance;
+        const label = noteLabel(note);
+
+        // Adjust font size based on label length to better fit sharps and flats
+        const reduce = 5 * (1 - 1 / label.length);
+        const font_size = (this.dim.note_radius * 1.05) - reduce;
+        const cx = fret_idx * this.dim.fret_distance - this.dim.fret_distance * 0.5;
+
+        drawCircle(this.g.notes, cx, cy, this.dim.note_radius, noteColor(note), '#999999', this.dim.note_radius * 0.1, note);
+
+        this.g.notes.append('svg:text')
+            .attr('x', cx)
+            .attr('y', cy)
+            .attr('dy', '0.38em')
+            .attr('fill', '#000000')
+            .style('text-anchor', `middle`)
+            .style('font-size', `${font_size}px`)
+            .style('font-family', 'Roboto,Ubuntu,Helvetica,Arial,sans-serif')
+            .text(label);
+    }
+
+
+    /**
      * Draw notes as circles on the fretboard. If no notes are passed as input, all notes will be drawn.
      */
     drawNotes(notes?: Array<string>) {
-        const g_notes = this.g('notes');
-        const radius = this.dim.fret_distance * 0.23;
-
         for (let string_idx = 0; string_idx < this.instrument.tuning.length; string_idx++) {
             const root_idx = noteIndex(this.instrument.tuning[string_idx]);
-            const cy = string_idx * this.dim.string_distance;
 
             for (let fret_idx = 0; fret_idx <= this.instrument.fret_count; fret_idx++) {
                 const note = noteAtPosition(root_idx, fret_idx, notes);
                 if (!note) continue;
 
-                const label = noteLabel(note);
-
-                // Adjust font size based on label length to better fit sharps and flats
-                const reduce = 5 * (1 - 1 / label.length);
-                const font_size = (radius * 1.05) - reduce;
-                const cx = fret_idx * this.dim.fret_distance - this.dim.fret_distance * 0.5;
-
-                drawCircle(g_notes, cx, cy, radius, noteColor(note), '#999999', radius * 0.1, note);
-
-                g_notes.append('svg:text')
-                    .attr('x', cx)
-                    .attr('y', cy)
-                    .attr('dy', '0.38em')
-                    .attr('fill', '#000000')
-                    .style('text-anchor', `middle`)
-                    .style('font-size', `${font_size}px`)
-                    .style('font-family', 'Roboto,Ubuntu,Helvetica,Arial,sans-serif')
-                    .text(label);
+                this.drawNoteAtPosition(note, string_idx, fret_idx);
             }
         }
     }

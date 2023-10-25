@@ -8,6 +8,7 @@
 <h1>Example Fretboards</h1>
 <div id="ukulele-all"></div>
 <div id="ukulele-eb"></div>
+<div id="ukulele-notes"></div>
 <div id="guitar-all"></div>
 
 <!-- <script src="../node_modules/d3-selection/src/index.js"></script>
@@ -23,6 +24,12 @@
 
     uke.draw('#ukulele-eb');
     uke.drawNotes(['Eb', 'G', 'Bb']);
+
+    uke.draw('#ukulele-notes');
+    uke.drawNoteAtPosition('Eb', 2, 3);
+    uke.drawNoteAtPosition('G', 1, 3);
+    uke.drawNoteAtPosition('Bb', 3, 3);
+    uke.drawNoteAtPosition('Db', 0, 4);
 
     const guitar = new traste.Fretboard(traste.guitar);
     guitar.draw('#guitar-all');
