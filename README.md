@@ -16,8 +16,8 @@ See the [examples directory](examples/).
 
 ## Demo
 
-* [Interactive Fretboard Guitar & Ukulele](https://guitarstreams.com/tool/fretboard/)
 * [Chord Detector for Ukulele](https://ukealong.com/tool/chord-detector/)
+* [Scales Explorer for Ukulele](https://ukealong.com/tool/scales/)
 
 ## License
 
