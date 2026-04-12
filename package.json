@@ -45,9 +45,10 @@
   "scripts": {
     "prepare": "npm run build",
     "build": "npm run build:js && npm run build:types",
-    "build:js": "esbuild src/index.ts --outfile=dist/traste.js --bundle --format=iife --global-name=traste",
+    "build:js": "node build.js",
     "build:types": "tsc",
-    "serve": "esbuild src/index.ts --outfile=dist/traste.js --bundle --format=iife --global-name=traste --watch --servedir=."
+    "serve": "esbuild src/index.ts --bundle --format=iife --global-name=traste --watch --servedir=."
   },
+  "type": "module",
   "types": "dist/traste.d.ts"
 }
