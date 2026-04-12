@@ -8,14 +8,14 @@
     "email": "code@ramiro.org"
   },
   "dependencies": {
-    "@tonaljs/tonal": "^4.6.5",
+    "@tonaljs/tonal": "^4.10.0",
     "cromatica": "^0.3.0",
     "d3-selection": "^3.0.0"
   },
   "devDependencies": {
-    "@types/d3-selection": "^3.0.8",
-    "esbuild": "^0.19.5",
-    "nodemon": "^3.0.1"
+    "@types/d3-selection": "^3.0.11",
+    "esbuild": "^0.19.12",
+    "typescript": "^5.0.0"
   },
   "directories": {
     "example": "examples"
@@ -37,15 +37,17 @@
     "ukulele"
   ],
   "license": "MIT",
-  "main": "dist/fretboard.js",
-  "module": "src/index.js",
+  "main": "dist/traste.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/yaph/traste.git"
   },
   "scripts": {
-    "build": "esbuild src/index.ts --outfile=dist/traste.js --bundle --format=iife --global-name=traste",
-    "watch": "nodemon -e ts -w src/ts -x 'npm run build'",
-    "serve": "esbuild --servedir=."
-  }
+    "prepare": "npm run build",
+    "build": "npm run build:js && npm run build:types",
+    "build:js": "esbuild src/index.ts --outfile=dist/traste.js --bundle --format=iife --global-name=traste",
+    "build:types": "tsc --emitDeclarationOnly --declaration --outDir dist src/index.ts",
+    "serve": "esbuild src/index.ts --outfile=dist/traste.js --bundle --format=iife --global-name=traste --watch --servedir=."
+  },
+  "types": "dist/traste.d.ts"
 }
