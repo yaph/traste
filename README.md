@@ -1,6 +1,6 @@
 # traste
 
-> A library for rendering guitar and ukulele fretboards as SVG elements.
+> A library for rendering guitar and ukulele fretboard diagrams as SVG elements.
 
 ![Ukulele Fretboard](img/ukulele-fretboard.png 'UkeAlong.com Ukulele Fretboard')
 
