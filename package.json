@@ -47,7 +47,7 @@
     "build": "npm run build:js && npm run build:types",
     "build:js": "node build.mjs",
     "build:types": "tsc",
-    "serve": "esbuild src/index.ts --bundle --format=iife --global-name=traste --watch --servedir=."
+    "serve": "esbuild --watch --servedir=."
   },
   "types": "dist/traste.d.ts"
 }
