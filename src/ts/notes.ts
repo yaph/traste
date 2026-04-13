@@ -40,7 +40,6 @@ export function noteAtPosition(root_index: number, position: number, notes?: Arr
  */
 export function noteIndex(name: string): number {
     const note = TonalNote.get(name);
-    debugger;
     if (note.letter) {
         if (chromatic_scale.includes(note.pc)) {
             return chromatic_scale.indexOf(note.pc);

@@ -52,7 +52,7 @@ export class Fretboard {
 
     draw(selector: string, width?: number): void {
         const parent = D3Select(selector);
-        width = this.boardWidth(parent);
+        width = this.boardWidth(parent, width);
 
         // Calculate fret and string distances based on container width
         const fret_distance = width / (this.instrument.fret_count + 1);
