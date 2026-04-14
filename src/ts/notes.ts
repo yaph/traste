@@ -1,4 +1,4 @@
-import { Note as TonalNote } from '@tonaljs/tonal';
+import { get, enharmonic } from '@tonaljs/note';
 
 const chromatic_scale = ['A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#'];
 
@@ -21,7 +21,7 @@ export function noteAtPosition(root_index: number, position: number, notes?: Arr
             return note;
         }
         for (let name of notes) {
-            if (note == TonalNote.enharmonic(name)) {
+            if (note == enharmonic(name)) {
                 return name;
             }
         }
@@ -39,14 +39,14 @@ export function noteAtPosition(root_index: number, position: number, notes?: Arr
  * @returns chromatic_scale array index
  */
 export function noteIndex(name: string): number {
-    const note = TonalNote.get(name);
+    const note = get(name);
     if (note.letter) {
         if (chromatic_scale.includes(note.pc)) {
             return chromatic_scale.indexOf(note.pc);
         }
-        const enharmonic = TonalNote.enharmonic(name);
-        if (chromatic_scale.includes(enharmonic)) {
-            return chromatic_scale.indexOf(enharmonic);
+        const alt_name = enharmonic(name);
+        if (chromatic_scale.includes(alt_name)) {
+            return chromatic_scale.indexOf(alt_name);
         }
     }
     throw Error(`Note unknown: ${name}`);

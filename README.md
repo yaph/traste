@@ -30,16 +30,16 @@ Width defaults to 95% of the container's width and can be passed as an optional 
 
 ### Instruments
 
-Two instruments are included: `traste.guitar` and `traste.ukulele`. Both are plain objects implementing the `Instrument` interface, so you can define custom instruments:
+Three instruments are included: `traste.bass`, `traste.guitar` and `traste.ukulele`. They are plain objects implementing the `Instrument` interface, so you can define custom instruments:
 
 ```ts
 import { Instrument } from 'traste';
 
-const bass: Instrument = {
-    tuning: ['G2', 'D2', 'A1', 'E1'],
-    string_gauges: [0.045, 0.065, 0.085, 0.105],
-    fret_count: 20,
-    fret_markers: [3, 5, 7, 9, 12, 15, 17, 19]
+const ukulele_low_g: Instrument = {
+    tuning: ['A4', 'E4', 'C4', 'G3'],
+    string_gauges: [0.024, 0.031, 0.037, 0.041],
+    fret_count: 12,
+    fret_markers: [5, 7, 10, 12]
 };
 ```
 

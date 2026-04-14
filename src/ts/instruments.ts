@@ -5,14 +5,19 @@ export interface Instrument {
     fret_markers: number[];
 }
 
+export const bass: Instrument = {
+    tuning: ['G2', 'D2', 'A1', 'E1'],
+    string_gauges: [0.045, 0.065, 0.085, 0.105],
+    fret_count: 12,
+    fret_markers: [3, 5, 7, 9, 12, 15, 17, 19]
+};
 
 export const guitar: Instrument = {
     tuning: ['E4', 'B3', 'G3', 'D3', 'A2', 'E2'],
     string_gauges: [0.01, 0.013, 0.017, 0.026, 0.036, 0.046],
-    fret_count: 15,
+    fret_count: 12,
     fret_markers: [3, 5, 7, 9, 12, 15, 17, 19, 21, 24]
 }
-
 
 export const ukulele: Instrument = {
     tuning: ['A4', 'E4', 'C4', 'G4'],

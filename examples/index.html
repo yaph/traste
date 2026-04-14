@@ -6,10 +6,11 @@
 </head>
 <body>
 <h1>Example Fretboards</h1>
-<div id="ukulele-all"></div>
-<div id="ukulele-eb"></div>
-<div id="ukulele-notes"></div>
-<div id="guitar-all"></div>
+<div id="guitar-all"><h2>Guitar All Notes</h2></div>
+<div id="bass-all"><h2>Bass All Notes</h2></div>
+<div id="ukulele-all"><h2>Ukulele All Notes</h2></div>
+<div id="ukulele-eb"><h2>Ukulele Eb Chord</h2></div>
+<div id="ukulele-notes"><h2>Ukulele Specific Notes</h2></div>
 
 <script src="../dist/traste.js"></script>
 
@@ -28,6 +29,9 @@
 
     const guitar = new traste.Fretboard(traste.guitar, '#guitar-all');
     guitar.drawNotes();
+
+    const bass = new traste.Fretboard(traste.bass, '#bass-all');
+    bass.drawNotes();
 </script>
 
 </body>
