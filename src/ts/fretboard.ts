@@ -1,5 +1,6 @@
 import { select as D3Select } from 'd3-selection';
 import { noteColor } from 'cromatica';
+import { midi as midiNote } from '@tonaljs/note';
 
 import { Instrument } from './instruments';
 import { noteAtPosition, noteIndex, noteLabel } from './notes';
@@ -26,6 +27,8 @@ function drawCircle(parent: any, cx: number, cy: number, radius: number,
     if (stroke) circle.style('stroke', stroke);
     if (stroke_width) circle.style('stroke-width', stroke_width);
     if (title) circle.attr('title', title);
+
+    return circle;
 }
 
 
@@ -167,7 +170,17 @@ export class Fretboard {
         const font_size = (this.dim.note_radius * 1.05) - reduce;
         const cx = fret_idx * this.dim.fret_distance - this.dim.fret_distance * 0.5;
 
-        drawCircle(this.g.notes, cx, cy, this.dim.note_radius, noteColor(note), '#999999', this.dim.note_radius * 0.1, note);
+        // Emit an event when a note name or circle is clicked and provide note details
+        const midi_value = (midiNote(this.instrument.tuning[string_idx]) ?? 0) + fret_idx;
+        const dispatch = (event: MouseEvent) => {
+            (event.target as Element).dispatchEvent(new CustomEvent('traste:note', {
+                detail: { note, midi: midi_value, string: string_idx, fret: fret_idx },
+                bubbles: true
+            }));
+        };
+
+        const circle = drawCircle(this.g.notes, cx, cy, this.dim.note_radius, noteColor(note), '#999999', this.dim.note_radius * 0.1, note);
+        circle.on('click', dispatch);
 
         this.g.notes.append('svg:text')
             .attr('x', cx)
@@ -177,7 +190,8 @@ export class Fretboard {
             .style('text-anchor', `middle`)
             .style('font-size', `${font_size}px`)
             .style('font-family', 'Roboto,Ubuntu,Helvetica,Arial,sans-serif')
-            .text(label);
+            .text(label)
+            .on('click', dispatch);
     }
 
 

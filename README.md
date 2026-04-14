@@ -43,6 +43,26 @@ const ukulele_low_g: Instrument = {
 };
 ```
 
+### Events
+
+Clicking a note circle dispatches a `traste:note` custom event on the clicked element. The event bubbles, so you can listen on the container element.
+
+```js
+document.querySelector('#fretboard').addEventListener('traste:note', (e) => {
+    const { note, midi, string, fret } = e.detail;
+    console.log(`${note} (MIDI ${midi}) at string ${string}, fret ${fret}`);
+});
+```
+
+The event detail contains:
+
+| Property | Description |
+|---|---|
+| `note` | Note name, e.g. `'Eb'` |
+| `midi` | MIDI note number with correct octave, e.g. `63` |
+| `string` | String index (0 = highest string) |
+| `fret` | Fret index (0 = open string) |
+
 ### API
 
 | Method | Description |
