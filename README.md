@@ -12,25 +12,21 @@ npm install traste
 
 ## Usage
 
-Create a `Fretboard` instance with an instrument, call `draw()` to render it into a container element, then call one of the note-drawing methods.
+Create a `Fretboard` instance with an instrument and a selector. The fretboard is rendered immediately on construction. Call `drawNotes()` or `drawNoteAtPosition()` to add notes.
 
 ```js
-// Draw all notes on a ukulele fretboard
-const uke = new traste.Fretboard(traste.ukulele);
-uke.draw('#fretboard');
-uke.drawNotes();
+const uke1 = new traste.Fretboard(traste.ukulele, '#fretboard');
+uke1.drawNotes();
 
-// Draw only the notes of an Eb major chord
-uke.draw('#fretboard-eb');
-uke.drawNotes(['Eb', 'G', 'Bb']);
+const uke2 = new traste.Fretboard(traste.ukulele, '#fretboard-eb');
+uke2.drawNotes(['Eb', 'G', 'Bb']);
 
-// Draw individual notes at specific string and fret positions
-uke.draw('#fretboard-positions');
-uke.drawNoteAtPosition('Eb', 2, 3);
-uke.drawNoteAtPosition('G', 1, 3);
+const uke3 = new traste.Fretboard(traste.ukulele, '#fretboard-positions');
+uke3.drawNoteAtPosition('Eb', 2, 3);
+uke3.drawNoteAtPosition('G', 1, 3);
 ```
 
-The `draw(selector, width?)` method appends an SVG element to the container matched by `selector`. Width defaults to 95% of the container's width.
+Width defaults to 95% of the container's width and can be passed as an optional third argument to the constructor.
 
 ### Instruments
 
@@ -51,9 +47,10 @@ const bass: Instrument = {
 
 | Method | Description |
 |---|---|
-| `draw(selector, width?)` | Render the fretboard SVG into the matched element |
+| `constructor(instrument, selector, width?)` | Render the fretboard SVG into the matched element |
 | `drawNotes(notes?)` | Draw all notes, or only those in the given array |
 | `drawNoteAtPosition(note, string, fret)` | Draw a single note at a specific string and fret index |
+| `clearNotes()` | Remove all drawn notes from the fretboard |
 
 ## Demo
 

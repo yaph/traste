@@ -34,7 +34,9 @@ export class Fretboard {
     private dim: Dimension = {}
     private g: Group = {}
 
-    constructor(private instrument: Instrument) {}
+    constructor(private instrument: Instrument, selector: string, width?: number) {
+        this.draw(selector, width);
+    }
 
 
     private boardWidth(container: any, width?: number): number {
@@ -50,7 +52,7 @@ export class Fretboard {
     }
 
 
-    draw(selector: string, width?: number): void {
+    private draw(selector: string, width?: number): void {
         const parent = D3Select(selector);
         width = this.boardWidth(parent, width);
 
@@ -156,7 +158,7 @@ export class Fretboard {
     /**
      * Draw given note at given string and fret indexes.
      */
-    drawNoteAtPosition(note: string, string_idx: number, fret_idx: number) {
+    drawNoteAtPosition(note: string, string_idx: number, fret_idx: number): void {
         const cy = string_idx * this.dim.string_distance;
         const label = noteLabel(note);
 
@@ -182,7 +184,7 @@ export class Fretboard {
     /**
      * Draw notes as circles on the fretboard. If no notes are passed as input, all notes will be drawn.
      */
-    drawNotes(notes?: Array<string>) {
+    drawNotes(notes?: string[]): void {
         for (let string_idx = 0; string_idx < this.instrument.tuning.length; string_idx++) {
             const root_idx = noteIndex(this.instrument.tuning[string_idx]);
 
@@ -193,5 +195,13 @@ export class Fretboard {
                 this.drawNoteAtPosition(note, string_idx, fret_idx);
             }
         }
+    }
+
+
+    /**
+     * Remove all drawn notes from the fretboard.
+     */
+    clearNotes(): void {
+        this.g.notes.selectAll('*').remove();
     }
 }
