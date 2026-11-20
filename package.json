@@ -1,7 +1,7 @@
 {
   "name": "traste",
   "description": "A library for rendering guitar and ukulele fretboards as SVG elements.",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "author": "Ramiro Gómez (https://ramiro.org/)",
   "bugs": {
     "url": "https://github.com/yaph/traste/issues",
@@ -48,11 +48,11 @@
     "url": "git+https://github.com/yaph/traste.git"
   },
   "scripts": {
-    "prepare": "npm run build",
-    "build": "npm run build:js && npm run build:types",
-    "build:js": "node build.mjs",
-    "build:types": "tsc",
-    "serve": "esbuild src/index.ts --bundle --outfile=dist/traste.js --format=iife --global-name=traste --watch --servedir=."
+    "prepare": "bun run build",
+    "build": "bun run build:js && bun run build:types",
+    "build:js": "bun ./build.mjs",
+    "build:types": "bun run --bun tsc --project tsconfig.json",
+    "serve": "bun run --bun esbuild src/index.ts --bundle --outfile=dist/traste.js --format=iife --global-name=traste --watch --servedir=."
   },
   "types": "dist/traste.d.ts"
 }

@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env bun
 import * as esbuild from 'esbuild';
 
 const shared = {

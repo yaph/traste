@@ -46,3 +46,26 @@ functions are exported from the package entry point. Existing exports remain.
 The uploaded source archive did not include a package manifest, so its package
 version cannot be updated here. These changes are intended for a breaking 2.x
 release because of the `drawNotes()` behavior change.
+
+## Bun build workflow
+
+This project uses Bun for dependency installation and script execution.
+
+```sh
+# Install dependencies and create/update bun.lock
+bun install
+
+# Build the browser bundles and TypeScript declarations
+bun run build
+
+# Start the esbuild development server
+bun run serve
+```
+
+The build still uses esbuild to generate the existing `traste` IIFE global.
+Bun runs the build script and local TypeScript/esbuild executables. TypeScript
+still emits declaration files according to `tsconfig.json`.
+
+Commit `bun.lock` so installs are reproducible. Generate it with `bun install`;
+it is not included in this archive because Bun is not installed in the build
+container used to prepare these files.
